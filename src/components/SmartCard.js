@@ -14,26 +14,17 @@ class SmartCard extends Component {
     }
   }
   pluginLoaded = () => {
+    console.log('loading smartcard plugin')
     const webcard = this.refs.webcard
     this.addEvent(webcard, 'cardpresent', this.cardPresent)
     this.addEvent(webcard, 'cardremoved', this.cardRemoved)
-    // try {
-    //   for (let i = 0; i < webcard.readers.length; i += 1) {
-    //     const rdr = document.createElement('h3')
-    //     rdr.textContent = webcard.readers[i].name
-    //     rdr.id = webcard.readers[i].name.replace(/\s/g, '').toLowerCase()
-    //   }
-    //   console.log(webcard.readers)
-    //   console.log(webcard.readers.length)
-    // } catch (e) {
-    //   console.error(e)
-    // }
   }
   cardPresent = (reader) => {
     const that = this
     setTimeout(() => that.initCard(reader), 10)
   }
   cardRemoved = () => {
+    console.log('card removed!')
     this.props.onChange(null)
   }
   hex2string = (hexx) => {
@@ -54,6 +45,7 @@ class SmartCard extends Component {
     return str
   }
   initCard = (reader) => {
+    console.log('reading card...')
     try {
       const person = {}
       let apdu
