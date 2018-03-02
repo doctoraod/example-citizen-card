@@ -115,11 +115,11 @@ class SmartCard extends Component {
         '80B013690200FF',
         '80B014680200FF'
       ];
-      let rawImage = []
+      let rawImage = ""
       for (var index in imageApdu) {
         resp = reader.transcieve(imageApdu[index])
         if (resp.length > 4) resp = resp.slice(0, -4)
-        rawImage.push(resp)
+        rawImage += resp
       }
       person.image = rawImage;
       this.props.onChange(person)

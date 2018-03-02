@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import btoa from 'btoa';
 import SmartCard from '../components/SmartCard';
 import JsonText from '../components/JsonText';
 
@@ -7,8 +8,18 @@ class App extends Component {
     super()
     this.state = {
       status: false,
-      data: {}
+      data: {},
+      image: ""
     } 
+  }
+  convertToBuffer = (hex) => {
+    return new Buffer(hex, 'hex')
+  }
+  convertToBase64Image = (data) => {
+    let buffer = this.convertToBuffer(data)
+    let image = btoa(String.fromCharCode.apply(null, buffer))
+    let base64Image = "data:image/png;base64," + image
+    return base64Image
   }
   handleSmartCardChange = (value) => {
     if (value === null) {
@@ -19,7 +30,8 @@ class App extends Component {
     } else {
       this.setState({
         status: true,
-        data: value
+        data: value,
+        image: this.convertToBase64Image(value.image)
       })
     }
   }
@@ -31,7 +43,10 @@ class App extends Component {
           <button className={this.state.status ? 'button is-success' : 'button is-danger'}>{this.state.status ? 'ON' : 'OFF'}</button>
         </h2>
         <h1 className="title">Data</h1>
-        <h2 className="subtitle"><JsonText data={this.state.data}/></h2>
+        <h2 className="subtitle">
+          <img src={this.state.image} alt=""/>
+          <JsonText data={this.state.data}/>
+        </h2>
         <SmartCard onChange={this.handleSmartCardChange} />
       </div>
     );
